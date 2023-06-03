@@ -296,8 +296,8 @@ namespace mai_sp {
     }
 
     public static void Main() {
-      // const string expression = "(3 + 4) * 2 / (7 - 5) ^ 2 ^ 3"; // ERROR: 3 is var 
-      const string expression = "(3 + a) * 2 / (b - 5) ^ 2 ^ 3";
+      // const string expression = "((3 + 4) * 2 / (7 - 5) ^ 2) % 2"; // ERROR: 3 is var 
+      const string expression = "((3 + a) * 2 / (b - 5) ^ 2) % 2";
       var tokenized = Tokenize(expression);
 
       var res = Converter.ConvertToPolishNotation(tokenized);
