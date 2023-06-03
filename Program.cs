@@ -134,7 +134,7 @@ namespace Tree {
 
     public string? Solve(in Dictionary<string, double> vars) {
       if ((Left == null || Right == null) && Token.Type is TokenType.Constant or TokenType.Variable) {
-        if (vars.ContainsKey(Token.Value!)) {
+        if (Token.Type == TokenType.Constant || Token.Type == TokenType.Variable && vars.ContainsKey(Token.Value!)) {
           return Token.Type == TokenType.Constant
             ? Token.Value
             : vars[Token.Value!].ToString(CultureInfo.CurrentCulture);
@@ -170,7 +170,7 @@ namespace Tree {
       _root = null;
     }
 
-    public void Build(List<Token> tokenizedPolishNotation) {
+    public void Build(in List<Token> tokenizedPolishNotation) {
       var s = new Stack<TreeNode>();
       var nodes = tokenizedPolishNotation.Select(token => new TreeNode(token)).ToList();
 
@@ -296,22 +296,22 @@ namespace mai_sp {
     }
 
     public static void Main() {
-      const string expression = "c + a";
-      // string expression = "(3 + 4) * 2 / (1 - 5) ^ 2 ^ 3";
+      // const string expression = "(3 + 4) * 2 / (7 - 5) ^ 2 ^ 3"; // ERROR: 3 is var 
+      const string expression = "(3 + a) * 2 / (b - 5) ^ 2 ^ 3";
       var tokenized = Tokenize(expression);
 
       var res = Converter.ConvertToPolishNotation(tokenized);
       Console.WriteLine(res);
       foreach (var token in res) {
-        Console.Write(token.Value);
+        Console.Write($"{token.Value} ");
       }
 
       var tree = new Tree.Tree();
       tree.Build(res);
       Console.WriteLine();
       var parameters = new Dictionary<string, double> {
-        ["a"] = 22,
-        ["b"] = 1,
+        ["a"] = 4,
+        ["b"] = 7,
       };
       Console.WriteLine(tree.Solve(parameters!));
     }
